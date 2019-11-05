@@ -1,6 +1,5 @@
 package com.fedex.smm.cache;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +28,7 @@ public class EmployeeCacheManagerImpl implements EmployeeCacheManager {
     	redisUtilEmployee.putMap(TABLE_EMPLOYEE,EMPLOYEE+employee.getEmployeeId(),employee);
     	redisUtilEmployee.setExpire(EMPLOYEE+employee.getEmployeeId(),20,TimeUnit.SECONDS);
     }
-    
-	/*
-	 * @Override public void cacheAllEmployeeDetails(Employees employeeList){
-	 * redisUtilEmployee.putMap(TABLE_EMPLOYEE,EMPLOYEE,employeeList);
-	 * redisUtilEmployee.setExpire(TABLE_EMPLOYEE,1,TimeUnit.DAYS); }
-	 */
-    
+   
     
 	@Override
 	public boolean checkEmpty(String empid) {
@@ -83,20 +76,6 @@ public class EmployeeCacheManagerImpl implements EmployeeCacheManager {
 	}
 	
 	
-	/*
-	 * @Override public boolean isFindAllEmpty() { // TODO Auto-generated method
-	 * stub
-	 * 
-	 * 
-	 * if(redisUtilEmployee.getMapAsAll(TABLE_EMPLOYEE) != null) {
-	 * 
-	 * 
-	 * List<Employee> emp= redisUtilEmployee.getValue(TABLE_EMPLOYEE);
-	 * List<Employee> emp = redisUtilEmployee.getMapAsSingleEntry(TABLE_EMPLOYEE);
-	 * System.out.println(" print from cache "+ emp.getEmployeeId());
-	 * System.out.println(" print from cache "+ emp.getEmployeeName());
-	 * 
-	 * return true ; } return false; }
-	 */
+	
 	
 }

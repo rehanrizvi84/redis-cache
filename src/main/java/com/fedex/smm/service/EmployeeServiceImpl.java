@@ -44,23 +44,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		List<Employee> employeeList = new ArrayList<Employee>();
 
-		if (employeeCacheManager.checkEmpty("1")) {// If cache is empty the put the data
-
-			List<Employee> employees = employeeDAO.findAll();// studentDAO.getStudentList();
-			employees.forEach(stud -> employeeCacheManager.cacheEmployeeDetails(stud));
-
-		} else {
-
-			System.out.println("find all called from db ");
-
-			List<Employee> employees = employeeDAO.findAll();// studentDAO.getStudentList();
-			employees.forEach(stud -> employeeCacheManager.cacheEmployeeDetails(stud));
-
-		}
+		employeeList = employeeDAO.findAll();
 
 		return employeeList;
 
-		// return employeeDAO.findAll();
 	}
 
 	@Override
