@@ -2,7 +2,12 @@ package com.fedex.smm.model;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by Java Developer Zone on 03-08-2017.
@@ -11,7 +16,12 @@ import javax.persistence.*;
 @Table(name = "employee")
 public class Employee implements Serializable {
 
-    @Id                                                 // primary key
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id                                                 // primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)     // auto increment
     @Column(name = "employeeId")
     private long employeeId;
