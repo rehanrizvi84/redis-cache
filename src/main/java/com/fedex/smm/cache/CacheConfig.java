@@ -2,6 +2,7 @@ package com.fedex.smm.cache;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
@@ -14,6 +15,11 @@ public class CacheConfig {
 	public JedisConnectionFactory jedisConnectionFactory() {
 		JedisConnectionFactory connectionFactory = new JedisConnectionFactory();
 		return connectionFactory;
+	}
+
+	@Bean
+	public RedisConnection redisConnection() {
+		return jedisConnectionFactory().getConnection();
 	}
 
 	@Bean

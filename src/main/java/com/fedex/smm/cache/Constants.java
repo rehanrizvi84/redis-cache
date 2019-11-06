@@ -4,5 +4,6 @@ public class Constants {
 
 	public static final String TABLE_EMPLOYEE = "TABLE_EMPLOYEE";
 
-	public static final String EMPLOYEE = "EMPLOYEE_";
+	public static final String EMPLOYEE = "EMPLOYEE";
+
 }

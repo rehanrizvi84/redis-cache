@@ -13,6 +13,7 @@ import com.fedex.smm.model.Employee;
  */
 @Repository
 @Transactional
-public interface EmployeeDAO extends CrudRepository<Employee, Long> {
-	List<Employee> findAll(); // fetch all Employee
+public interface EmployeeRepository extends CrudRepository<Employee, Long> {
+
+	List<Employee> findAll();
 }

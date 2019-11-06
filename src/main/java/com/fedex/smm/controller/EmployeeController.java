@@ -1,63 +1,86 @@
 package com.fedex.smm.controller;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fedex.smm.model.Employee;
 import com.fedex.smm.service.EmployeeService;
 
-/**
- */
-@RestController // for rest response
+@RestController
 public class EmployeeController {
 
-	@Autowired
-	private CacheManager cacheManager; // autowire cache manager
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 
 	@Autowired
 	private EmployeeService employeeService;
 
-	// to add new employee
-	@PostMapping(value = "save") // or user @GetMapping
-	public void save(@RequestBody Employee employee) {
-		System.out.println("employee ------" + employee.getEmployeeName());
-		employeeService.save(employee);
+	@PostMapping(value = "saveEmp")
+	public Employee save(@RequestBody Employee employee) {
+		employee = employeeService.save(employee);
+		logger.info("Saved Employee Successfully");
+		return employee;
 
 	}
 
-	@GetMapping(value = "employee") // or use @GetMapping
-	public Employee getEmployeeById(@RequestParam String id) {
-		System.out.println(" ID recieved " + id);
-		Long empid = Long.valueOf(id);
-		return employeeService.findById(empid);
+	@PutMapping(value = "updateEmp")
+	public Employee update(@RequestBody Employee employee) {
+		employee = employeeService.update(employee);
+		logger.info("Updated Employee Successfully");
+		return employee;
+
 	}
 
-	// list of all employee
-	@GetMapping(value = "listEmployee") // or use @GetMapping
-	public java.util.List<Employee> listEmployee() {
-		return employeeService.findAll();
+	@GetMapping(value = "getEmp/{id}")
+	public Employee getById(@PathVariable Long id) {
+		Employee employee = employeeService.getById(id);
+		logger.info("Get Employee by id successful");
+		return employee;
 	}
 
-	// delete specific employee using employee id
-	@GetMapping(value = "delete") // or use @DeleteMapping
-	public void delete(@RequestParam("id") long id) {
+	@GetMapping(value = "getAllEmp")
+	public List<Employee> getAll() {
+		List<Employee> employees = employeeService.findAll();
+		logger.info("Get All employees successful");
+		return employees;
+	}
+
+	@DeleteMapping(value = "deleteEmp/{id}")
+	public String delete(@PathVariable Long id) {
 		employeeService.delete(id);
+		return "Deleted the Employee details with id " + id + " successfully";
 	}
 
-	// clear all cache using cache manager
-
-	@GetMapping(value = "clearCache")
-	public void clearCache() {
-		for (String name : cacheManager.getCacheNames()) {
-			cacheManager.getCache(name).clear();
-		}
+	@GetMapping(value = "clearAll")
+	public String clearAll() {
+		employeeService.clearAll();
+		return "Cleared all cached content from all Redis DB";
 	}
 
+	@GetMapping(value = "clearByDb/{index}")
+	public String clearByDb(@PathVariable int index) {
+		employeeService.clearByDbIndex(index);
+		return "Cleared cached content from Redis DB with index " + index;
+	}
+
+	@GetMapping(value = "clearByKey/{key}")
+	public String clearByKey(@PathVariable String key) {
+		employeeService.clearByKey(key);
+		return "Cleared cached content from Redis DB with key " + key;
+	}
+
+	@GetMapping(value = "clearByKeyAndHashKey/{key}/{hashKey}")
+	public String clearByKeyAndHashKey(@PathVariable String key, @PathVariable Long hashKey) {
+		employeeService.clearByKeyAndHashKey(key, hashKey);
+		return "Cleared cached content from Redis DB with key " + key + " and hash key " + hashKey;
+	}
 }
