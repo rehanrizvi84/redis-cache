@@ -1,6 +1,8 @@
+server:
+  port: 9080
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/employee_dev
+    url: jdbc:mysql://34.66.55.65/datarepo
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver 
@@ -13,7 +15,7 @@ spring:
       hibernate:
         dialect : org.hibernate.dialect.MySQL5Dialect
   redis:
-    host: localhost
+    host: 10.156.103.227
     port: 6379
 
 redis:

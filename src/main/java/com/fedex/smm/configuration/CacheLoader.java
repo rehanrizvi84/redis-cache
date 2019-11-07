@@ -1,7 +1,5 @@
 package com.fedex.smm.configuration;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 
-import com.fedex.smm.model.Employee;
+import com.fedex.smm.dto.EmployeeResponse;
 import com.fedex.smm.service.EmployeeService;
 
 @Configuration
@@ -27,8 +25,9 @@ public class CacheLoader {
 	@EventListener(ApplicationReadyEvent.class)
 	public void loadCache() {
 		if (loadOnStartUp) {
-			List<Employee> employees = employeeService.findAll();
-			logger.info("Loading All Employess into Redis Cache. Number of Employees in DB : " + employees.size());
+			EmployeeResponse employeesResponse = employeeService.findAll();
+			logger.info("Loading All Employess into Redis Cache at the startup. Number of Employees in DB : "
+					+ employeesResponse.getEmployees().size());
 		}
 	}
 }

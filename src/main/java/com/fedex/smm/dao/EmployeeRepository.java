@@ -15,5 +15,5 @@ import com.fedex.smm.model.Employee;
 @Transactional
 public interface EmployeeRepository extends CrudRepository<Employee, Long> {
 
-	List<Employee> findAll();
+	public List<Employee> findAll();
 }

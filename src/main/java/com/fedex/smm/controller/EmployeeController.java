@@ -1,7 +1,5 @@
 package com.fedex.smm.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fedex.smm.dto.EmployeeResponse;
 import com.fedex.smm.model.Employee;
 import com.fedex.smm.service.EmployeeService;
 
@@ -48,8 +47,8 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "getAllEmp")
-	public List<Employee> getAll() {
-		List<Employee> employees = employeeService.findAll();
+	public EmployeeResponse getAll() {
+		EmployeeResponse employees = employeeService.findAll();
 		logger.info("Get All employees successful");
 		return employees;
 	}
@@ -83,4 +82,5 @@ public class EmployeeController {
 		employeeService.clearByKeyAndHashKey(key, hashKey);
 		return "Cleared cached content from Redis DB with key " + key + " and hash key " + hashKey;
 	}
+
 }

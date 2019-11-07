@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,13 @@ import org.springframework.stereotype.Service;
 import com.fedex.smm.cache.Constants;
 import com.fedex.smm.configuration.RedisHashUtil;
 import com.fedex.smm.dao.EmployeeRepository;
+import com.fedex.smm.dto.EmployeeResponse;
 import com.fedex.smm.model.Employee;
 
 @Service
 public class EmployeeService {
+
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -59,15 +64,24 @@ public class EmployeeService {
 		redisHashUtil.remove(Constants.EMPLOYEE, id);
 	}
 
-	public List<Employee> findAll() {
+	public EmployeeResponse findAll() {
+		EmployeeResponse employees = new EmployeeResponse();
 		if (!redisHashUtil.isFullyLoaded() || redisHashUtil.getKeys(Constants.EMPLOYEE).isEmpty()) {
 			List<Employee> allEmps = employeeRepository.findAll();
 			Map<Long, Employee> empMap = new HashMap<>();
 			allEmps.forEach(emp -> empMap.put(emp.getEmployeeId(), emp));
 			redisHashUtil.addAll(Constants.EMPLOYEE, empMap);
 			redisHashUtil.setAllLoaded(true);
+			employees.setEmployees(allEmps.subList(0, 9));
+			employees.setMessage("Loaded All Employees from Database. Only 10 records are in response.");
+			logger.info("Loading Employees from Database. Total Employees = " + allEmps.size());
+
+		} else {
+			logger.info("Loading Employees from Redis Cache.");
+			employees.setEmployees(redisHashUtil.getValues(Constants.EMPLOYEE).subList(0, 9));
+			employees.setMessage("Loaded All employees from Cache. Only 10 records are in response.");
 		}
-		return redisHashUtil.getValues(Constants.EMPLOYEE);
+		return employees;
 	}
 
 	public void clearAll() {
